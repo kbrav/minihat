@@ -214,3 +214,37 @@ function revert(hre) {
     });
 }
 exports.revert = revert;
+var _snaps = {};
+function snapshot(hre, name) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, snapshot(hre)];
+                case 1:
+                    _a.sent();
+                    _snaps[name] = _snap;
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.snapshot = snapshot;
+function revert(hre, name) {
+    return __awaiter(this, void 0, void 0, function () {
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0: return [4 /*yield*/, hre.network.provider.request({
+                        method: 'evm_revert',
+                        params: [_snaps[name]]
+                    })];
+                case 1:
+                    _a.sent();
+                    return [4 /*yield*/, snapshot(hre, name)];
+                case 2:
+                    _a.sent();
+                    return [2 /*return*/];
+            }
+        });
+    });
+}
+exports.revert = revert;

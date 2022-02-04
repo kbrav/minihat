@@ -98,3 +98,34 @@ export async function revert (hre) {
   })
   await snapshot(hre)
 }
+
+let _snaps = {}
+
+export async function snapshot (hre, name) {
+  await snapshot(hre)
+  _snaps[name] = _snap
+}
+
+export async function revert (hre, name) {
+  await hre.network.provider.request({
+    method: 'evm_revert',
+    params: [_snaps[name]]
+  })
+  await snapshot(hre, name)
+}
+
+let snaps = {}
+export async function snapshot_name (name) {
+  const _snap = await hh.network.provider.request({
+    method: 'evm_snapshot'
+  })
+  snaps[name] = _snap
+}
+
+export async function revert_name (name) {
+  await hh.network.provider.request({
+    method: 'evm_revert',
+    params: [snaps[name]]
+  })
+  await snapshot_name(name)
+}
